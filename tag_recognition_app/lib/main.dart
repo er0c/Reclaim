@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'tag_scanner_page.dart';
+import 'welcome_page.dart';
 
 void main() => runApp(const TagRecognitionApp());
 
@@ -28,11 +29,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFF7DA56C), Color(0xFF2C5E32)],
-          ),
+          color: Colors.green, // Replaced gradient with solid green color
         ),
         child: Center(
           child: Padding(
@@ -57,27 +54,29 @@ class HomePage extends StatelessWidget {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green[400],
-                    foregroundColor: Colors.white,
+                    foregroundColor: Color(0xFFEFEFEF), // Softer white for text
+                    side: const BorderSide(color: Color(0xFFEFEFEF), width: 2), // Softer white outline
                     padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
                   ),
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const TagScannerPage()),
+                      MaterialPageRoute(builder: (context) => WelcomePage()),
                     );
                   },
-                  child: const Text('Start Scanning'),
+                  child: const Text('Get Started'),
                 ),
                 const SizedBox(height: 15),
                 OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.green[700],
+                    foregroundColor: Color(0xFFEFEFEF), // Softer white text
+                    side: const BorderSide(color: Color(0xFFEFEFEF), width: 2), // Softer white outline
                     padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 40),
                   ),
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const TagScannerPage()),
+                      MaterialPageRoute(builder: (context) => WelcomePage()),
                     );
                   },
                   child: const Text('Learn More'),
