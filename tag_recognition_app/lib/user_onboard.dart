@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'preferences_page.dart';
 import 'welcome_page.dart';
 
@@ -16,6 +18,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
   final TextEditingController _bioController = TextEditingController();
   DateTime? _selectedBirthday;
   int _currentPageIndex = 1; // Index for navigation dots
+  File? _profileImage; // To store the selected profile image
+
+  final ImagePicker _picker = ImagePicker();
 
   void _pickBirthday() async {
     final DateTime? pickedDate = await showDatePicker(
@@ -28,6 +33,24 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (pickedDate != null && pickedDate != _selectedBirthday) {
       setState(() {
         _selectedBirthday = pickedDate;
+      });
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> _takePhoto() async {
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      setState(() {
+        _profileImage = File(pickedFile.path);
       });
     }
   }
@@ -76,6 +99,44 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  // Profile Picture
+                  Center(
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: _profileImage != null
+                              ? FileImage(_profileImage!)
+                              : const AssetImage('assets/default_profile.png') as ImageProvider,
+                          backgroundColor: Colors.grey[300],
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: _pickImage,
+                              icon: const Icon(Icons.photo),
+                              label: const Text("Upload"),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green[600],
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            ElevatedButton.icon(
+                              onPressed: _takePhoto,
+                              icon: const Icon(Icons.camera_alt),
+                              label: const Text("Take Photo"),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   // Username
                   const Text(
                     "Username",
@@ -102,74 +163,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       }
                       return null;
                     },
-                  ),
-                  const SizedBox(height: 16),
-                  // Email
-                  const Text(
-                    "Email",
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10.0,
-                        horizontal: 12.0,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
-                    style: const TextStyle(color: Colors.black),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Please enter an email";
-                      }
-                      if (!RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
-                          .hasMatch(value)) {
-                        return "Please enter a valid email";
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  // Birthday
-                  const Text(
-                    "Birthday",
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  GestureDetector(
-                    onTap: _pickBirthday,
-                    child: AbsorbPointer(
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10.0,
-                            horizontal: 12.0,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          hintText: _selectedBirthday == null
-                              ? "Select your birthday"
-                              : "${_selectedBirthday!.year}-${_selectedBirthday!.month}-${_selectedBirthday!.day}",
-                        ),
-                        style: const TextStyle(color: Colors.black),
-                        validator: (value) {
-                          if (_selectedBirthday == null) {
-                            return "Please select a birthday";
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
                   ),
                   const SizedBox(height: 16),
                   // Bio

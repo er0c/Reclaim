@@ -88,29 +88,6 @@ class WelcomePage extends StatelessWidget {
                 style: const TextStyle(color: Colors.black),
               ),
               const SizedBox(height: 16),
-              // Username
-              const Text(
-                'Username',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                decoration: InputDecoration(
-                  prefixText: '@',
-                  prefixStyle: const TextStyle(color: Colors.grey),
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 12.0,
-                  ), // Adjust padding to make the box smaller
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-                style: const TextStyle(color: Colors.black),
-              ),
-              const SizedBox(height: 16),
               // Password
               const Text(
                 'Password',
